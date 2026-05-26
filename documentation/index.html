@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Code Debugger Pro — Documentation</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, Segoe UI, sans-serif; line-height: 1.65; max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 3rem; color: #1e293b; background: #f8fafc; }
+    h1 { color: #0f172a; border-bottom: 2px solid #0891b2; padding-bottom: .5rem; font-size: 1.75rem; }
+    h2 { color: #0369a1; margin-top: 2.25rem; font-size: 1.15rem; scroll-margin-top: 1rem; }
+    h3 { color: #334155; margin-top: 1.25rem; font-size: 1rem; }
+    code { background: #e2e8f0; padding: .12em .4em; border-radius: 4px; font-size: .88em; }
+    pre { background: #e2e8f0; padding: 1rem; border-radius: 6px; overflow-x: auto; font-size: .85rem; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .88rem; }
+    th, td { border: 1px solid #cbd5e1; padding: .45rem .65rem; text-align: left; vertical-align: top; }
+    th { background: #e2e8f0; }
+    .ok { color: #059669; font-weight: 600; }
+    .warn { color: #b45309; }
+    a { color: #0284c7; }
+    ul, ol { padding-left: 1.35rem; }
+    .nav { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem 1.25rem; margin: 1.25rem 0; font-size: .9rem; columns: 2; column-gap: 2rem; }
+    .nav a { display: block; margin: .2rem 0; break-inside: avoid; }
+    .note { background: #ecfeff; border: 1px solid #a5f3fc; border-radius: 6px; padding: .75rem 1rem; margin: 1rem 0; font-size: .9rem; }
+  </style>
+</head>
+<body>
+
+  <h1>Code Debugger Pro — Documentation</h1>
+  <p><strong>Version 2.1.0</strong> — Browser-based code repair with multiple LLM providers, server proxy, diff output, and local configuration.</p>
+
+  <div class="nav">
+    <strong>Contents</strong>
+    <a href="#overview">Overview</a>
+    <a href="#structure">File structure</a>
+    <a href="#install">Installation</a>
+    <a href="#quick-start">Quick start</a>
+    <a href="#ui">Interface guide</a>
+    <a href="#connection">Connection modes</a>
+    <a href="#php-proxy">PHP proxy</a>
+    <a href="#node-proxy">Node proxy</a>
+    <a href="#providers">Providers &amp; defaults</a>
+    <a href="#custom">Custom provider</a>
+    <a href="#advanced">Advanced options</a>
+    <a href="#features">Features</a>
+    <a href="#faq">FAQ</a>
+    <a href="#support">Support</a>
+  </div>
+
+  <h2 id="overview">1. Overview</h2>
+  <p>Code Debugger Pro helps developers fix broken source code using LLM APIs. Paste code (and an optional error message), run <strong>Fix Code</strong>, and receive:</p>
+  <ul>
+    <li>A short explanation of the bug</li>
+    <li>Corrected source in the <strong>Fixed</strong> tab</li>
+    <li>A line <strong>Diff</strong> view (removed / added lines)</li>
+  </ul>
+  <p>No database or framework install — upload <code>index.html</code> and <code>api.php</code> to any PHP-capable host. API keys stay in the user's browser (localStorage).</p>
+
+  <h2 id="structure">2. File structure</h2>
+  <pre>index.html              Main application
+api.php                 PHP proxy (recommended for production)
+proxy/server.js         Node.js proxy (optional, local development)
+documentation/index.html   This manual
+README.txt              Quick overview
+INSTALL.txt             Installation steps
+CHANGELOG.md            Version history
+LICENSE.txt             License terms</pre>
+
+  <h2 id="install">3. Installation</h2>
+  <h3>Requirements</h3>
+  <ul>
+    <li><strong>Browser:</strong> Chrome, Firefox, Safari, or Edge (recent version)</li>
+    <li><strong>PHP proxy:</strong> PHP 7.4+, cURL extension, outbound HTTPS</li>
+    <li><strong>Node proxy:</strong> Node.js 16+ (development only)</li>
+    <li><strong>API key:</strong> From your chosen LLM provider (user-paid usage)</li>
+  </ul>
+  <h3>Shared hosting</h3>
+  <ol>
+    <li>Upload all files to <code>public_html</code> or a subfolder.</li>
+    <li>Place <code>index.html</code> and <code>api.php</code> in the <strong>same directory</strong>.</li>
+    <li>Open <code>https://yourdomain.com/path/index.html</code> (not <code>file://</code>).</li>
+    <li>Configure PHP Proxy (see <a href="#connection">Connection modes</a>).</li>
+  </ol>
+  <p>See <code>INSTALL.txt</code> for PHP built-in server and Node proxy commands.</p>
+
+  <h2 id="quick-start">4. Quick start</h2>
+  <pre>1. Provider → select vendor (e.g. DeepSeek)
+2. Connection → PHP Proxy | Proxy URL → api.php
+3. Click Test → green status dot
+4. API Key → paste key → Save Configuration
+5. Center panel → paste broken code → Fix Code
+6. Right panel → Fixed / Diff → Copy or Download</pre>
+
+  <h2 id="ui">5. Interface guide</h2>
+  <table>
+    <tr><th>Area</th><th>Description</th></tr>
+    <tr><td><strong>Header</strong></td><td>Theme selector, current provider badge, version</td></tr>
+    <tr><td><strong>API Configuration</strong></td><td>Provider, connection, proxy, API key, model, base URL</td></tr>
+    <tr><td><strong>Broken Code</strong></td><td>Language selector, examples dropdown, code editor</td></tr>
+    <tr><td><strong>Fixed Result</strong></td><td>Explanation, Fixed tab, Diff tab, copy/download/export</td></tr>
+    <tr><td><strong>History</strong></td><td>Last 10 debug sessions (header button)</td></tr>
+  </table>
+  <h3>Proxy status</h3>
+  <p>Beside Proxy URL: <span class="ok">green dot</span> = proxy OK, <span class="warn">red dot</span> = failed (click link for setup guide). Use <strong>Test</strong> to check manually.</p>
+  <h3>Reset defaults</h3>
+  <p><strong>Reset model &amp; URL to defaults</strong> restores the built-in Model and Base URL for the <em>current</em> provider and clears wrong saved values.</p>
+  <h3>Switching providers</h3>
+  <p>Each provider remembers its own API key, model, and base URL. When you switch provider, the form loads that provider's saved settings (or defaults if none saved).</p>
+
+  <h2 id="connection">6. Connection modes</h2>
+  <table>
+    <tr><th>Mode</th><th>When to use</th><th>Proxy URL</th></tr>
+    <tr><td><strong>Direct (browser)</strong></td><td>Works for Ollama, <strong>DeepSeek</strong> (often), and quick local tests. Fails with CORS on many other APIs.</td><td>—</td></tr>
+    <tr><td><strong>PHP Proxy</strong></td><td class="ok">Best default for sites you ship to customers — always works if PHP/cURL is OK</td><td><code>api.php</code></td></tr>
+    <tr><td><strong>Node Proxy</strong></td><td>Local development with Node running</td><td><code>http://localhost:8787/proxy</code></td></tr>
+  </table>
+  <div class="note"><strong>Tip:</strong> PHP and Node proxy URLs are saved separately. Selecting Node Proxy will not keep <code>api.php</code> in the URL field — and vice versa.</div>
+
+  <h3 id="php-proxy">6.1 PHP proxy setup</h3>
+  <ol>
+    <li>Upload <code>api.php</code> next to <code>index.html</code>.</li>
+    <li>Connection: <strong>PHP Proxy</strong>, Proxy URL: <code>api.php</code>.</li>
+    <li>Click <strong>Test</strong> — message: <em>PHP proxy is reachable</em>.</li>
+    <li>Browser check: <code>https://yoursite.com/api.php?ping=1</code> → <code>{"ok":true,...}</code></li>
+  </ol>
+  <p><strong>Common errors:</strong> 404 (file missing), 500 (cURL disabled), opening app via <code>file://</code>.</p>
+
+  <h3 id="node-proxy">6.2 Node proxy setup</h3>
+  <ol>
+    <li>Terminal: <code>node proxy/server.js</code> (from package folder).</li>
+    <li>Connection: <strong>Node Proxy</strong>.</li>
+    <li>Proxy URL: <code>http://localhost:8787/proxy</code> (not <code>api.php</code>).</li>
+    <li>Click <strong>Test</strong> — message: <em>Node proxy is running</em>.</li>
+    <li>Check: <code>http://localhost:8787/health</code></li>
+  </ol>
+
+  <h2 id="providers">7. Providers &amp; default Model / Base URL</h2>
+  <p>Defaults load when you first select a provider. After <strong>Save Configuration</strong>, your values are stored per provider in localStorage.</p>
+
+  <h3>Direct vs PHP Proxy — important</h3>
+  <div class="note">
+    <strong>PHP Proxy is recommended for production</strong>, but not every provider <em>requires</em> it.
+    <strong>Direct (browser)</strong> works when the vendor allows cross-origin requests (CORS) from your site.
+    If you see <code>Failed to fetch</code>, switch to PHP Proxy — that is not a bug in this app.
+  </div>
+  <table>
+    <tr><th>Provider</th><th>Default model</th><th>Default base URL</th><th>Direct</th><th>Proxy</th></tr>
+    <tr><td>OpenAI</td><td><code>gpt-4o-mini</code></td><td><code>https://api.openai.com/v1</code></td><td class="warn">Usually blocked</td><td class="ok">Recommended</td></tr>
+    <tr><td>Google Gemini</td><td><code>gemini-2.0-flash</code></td><td><em>(built-in API)</em></td><td class="warn">Usually blocked</td><td class="ok">Recommended</td></tr>
+    <tr><td>Anthropic Claude</td><td><code>claude-3-5-haiku-20241022</code></td><td><code>https://api.anthropic.com</code></td><td class="warn">Usually blocked</td><td class="ok">Recommended</td></tr>
+    <tr><td>Groq</td><td><code>llama-3.3-70b-versatile</code></td><td><code>https://api.groq.com/openai/v1</code></td><td>Sometimes</td><td class="ok">Recommended</td></tr>
+    <tr><td>DeepSeek</td><td><code>deepseek-chat</code></td><td><code>https://api.deepseek.com/v1</code></td><td class="ok">Often works</td><td>Optional</td></tr>
+    <tr><td>Mistral AI</td><td><code>mistral-small-latest</code></td><td><code>https://api.mistral.ai/v1</code></td><td class="warn">Usually blocked</td><td class="ok">Recommended</td></tr>
+    <tr><td>OpenRouter</td><td><code>openai/gpt-4o-mini</code></td><td><code>https://openrouter.ai/api/v1</code></td><td class="warn">Usually blocked</td><td class="ok">Recommended</td></tr>
+    <tr><td>Together AI</td><td><code>meta-llama/Llama-3.3-70B-Instruct-Turbo</code></td><td><code>https://api.together.xyz/v1</code></td><td class="warn">Usually blocked</td><td class="ok">Recommended</td></tr>
+    <tr><td>xAI (Grok)</td><td><code>grok-2-latest</code></td><td><code>https://api.x.ai/v1</code></td><td class="warn">Usually blocked</td><td class="ok">Recommended</td></tr>
+    <tr><td>Cohere</td><td><code>command-r-plus-08-2024</code></td><td><code>https://api.cohere.com</code></td><td class="warn">Usually blocked</td><td class="ok">Recommended</td></tr>
+    <tr><td>Ollama (Local)</td><td><code>llama3.2</code></td><td><code>http://localhost:11434/v1</code></td><td class="ok">Yes (local)</td><td>—</td></tr>
+    <tr><td>Azure OpenAI</td><td><code>gpt-4o</code></td><td>Your deployment URL</td><td>Varies</td><td class="ok">Recommended</td></tr>
+    <tr><td>Perplexity</td><td><code>sonar</code></td><td><code>https://api.perplexity.ai</code></td><td class="warn">Usually blocked</td><td class="ok">Recommended</td></tr>
+    <tr><td>Fireworks AI</td><td><code>accounts/fireworks/models/llama-v3p3-70b-instruct</code></td><td><code>https://api.fireworks.ai/inference/v1</code></td><td class="warn">Usually blocked</td><td class="ok">Recommended</td></tr>
+    <tr><td>Custom</td><td><em>(you set)</em></td><td><code>https://api.example.com/v1</code></td><td>Depends</td><td class="ok">Recommended</td></tr>
+  </table>
+  <p><strong>DeepSeek:</strong> Many users can use <strong>Direct (browser)</strong> successfully (as you may have tested). Keep PHP Proxy as a fallback for other users, strict networks, or if Direct stops working after a provider policy change.</p>
+  <p>Obtain API keys from each vendor's developer console. Billing is direct with the provider.</p>
+
+  <h2 id="custom">8. Custom provider</h2>
+  <p>For private gateways, regional proxies, or any <strong>OpenAI-compatible</strong> API (<code>/v1/chat/completions</code>):</p>
+  <ol>
+    <li>Provider: <strong>Custom (OpenAI-compatible)</strong></li>
+    <li><strong>Base URL</strong> — required, e.g. <code>https://gateway.company.com/v1</code></li>
+    <li><strong>Model</strong> — required, your model identifier</li>
+    <li><strong>API Key</strong> — if your gateway requires it</li>
+    <li>Use <strong>PHP Proxy</strong> — the hostname in Base URL is allowed automatically per request</li>
+  </ol>
+  <p>To permanently whitelist hosts on the server, edit <code>$extraAllowedHosts</code> in <code>api.php</code> or <code>EXTRA_ALLOWED_HOSTS</code> in <code>proxy/server.js</code>.</p>
+
+  <h2 id="advanced">9. Advanced options</h2>
+  <p>Open <strong>Advanced options</strong> in the left panel.</p>
+  <table>
+    <tr><th>Setting</th><th>Default</th><th>Guidance</th></tr>
+    <tr><td>Temperature</td><td>0.2</td><td>Lower = more stable fixes. Rarely needs changing.</td></tr>
+    <tr><td>Max tokens</td><td>4096</td><td>Increase to 8192 if output is truncated. Presets: 2K / 4K / 8K.</td></tr>
+    <tr><td>Stream response</td><td>On</td><td>Typing effect; requires proxy + compatible API.</td></tr>
+    <tr><td>White label</td><td>—</td><td>Custom title, tagline, logo text (max 3 chars), hide footer.</td></tr>
+  </table>
+
+  <h2 id="features">10. Features list</h2>
+  <ul>
+    <li>15 LLM providers (14 vendors + Custom)</li>
+    <li>5 UI themes</li>
+    <li>Syntax highlighting (14+ languages)</li>
+    <li>Built-in bug examples</li>
+    <li>Fix Code with explanation + corrected source</li>
+    <li>Diff view (line-level)</li>
+    <li>Streaming output</li>
+    <li>History (10 sessions)</li>
+    <li>Copy, download TXT, export JSON</li>
+    <li>Proxy health check + documentation links</li>
+    <li>Per-provider settings + reset defaults</li>
+    <li>White-label branding</li>
+  </ul>
+
+  <h2 id="faq">11. FAQ</h2>
+  <p><strong>Failed to fetch?</strong><br>Try PHP Proxy first (most reliable). Direct may work for DeepSeek/Groq but not for OpenAI/Claude/Gemini. Do not use <code>file://</code>.</p>
+  <p><strong>DeepSeek with Direct works for me — do I need proxy?</strong><br>No — if Direct works in your browser, you can keep it. Proxy is for users or networks where CORS blocks Direct, and for providers that never allow browser calls.</p>
+  <p><strong>Wrong model/URL after switching provider?</strong><br>Click <strong>Reset model &amp; URL to defaults</strong>, then Save Configuration.</p>
+  <p><strong>Direct works but proxy fails?</strong><br>Check <code>api.php?ping=1</code>, PHP cURL, and that files are in the same folder.</p>
+  <p><strong>Output cut off?</strong><br>Advanced → Max tokens → 8192.</p>
+  <p><strong>Database required?</strong><br>No.</p>
+  <p><strong>Embed in another site?</strong><br>Host files and link or iframe; test X-Frame-Options on your host.</p>
+  <p><strong>Is my API key sent to your server?</strong><br>Keys go from the browser to the LLM API (via proxy if enabled). This package does not include a key storage backend.</p>
+
+  <h2 id="support">12. Support</h2>
+  <p>Contact the author through your marketplace purchase page. Include:</p>
+  <ul>
+    <li>Browser and OS</li>
+    <li>Provider and connection mode</li>
+    <li>Proxy test result (green/red)</li>
+    <li>Exact error message from the app</li>
+  </ul>
+
+  <p style="margin-top:2.5rem;padding-top:1rem;border-top:1px solid #e2e8f0">
+    <a href="../index.html"><strong>← Open Code Debugger Pro</strong></a>
+    &nbsp;·&nbsp; <a href="../INSTALL.txt">INSTALL.txt</a>
+    &nbsp;·&nbsp; <a href="../CHANGELOG.md">CHANGELOG.md</a>
+  </p>
+
+</body>
+</html>
