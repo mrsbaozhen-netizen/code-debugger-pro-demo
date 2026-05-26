@@ -87,27 +87,27 @@
         </div>
         <div>
           <label class="block text-xs font-medium t-text-muted mb-1">Connection</label>
-          <select id="connectionMode" class="w-full t-input border rounded-lg px-3 py-2 text-sm">
-            <option value="direct">Direct (browser)</option>
-            <option value="php">PHP Proxy (recommended)</option>
-            <option value="node">Node Proxy</option>
+          <select id="connectionMode" class="w-full t-input border rounded-lg px-3 py-2 text-sm" title="PHP Proxy: best for live sites. Direct: browser-only (works for some providers). Node: local dev.">
+            <option value="direct">Direct — browser only</option>
+            <option value="php">PHP Proxy — recommended</option>
+            <option value="node">Node Proxy — local dev</option>
           </select>
         </div>
         <div id="proxyUrlWrap">
           <label class="block text-xs font-medium t-text-muted mb-1">Proxy URL</label>
-          <input type="text" id="proxyUrl" value="api.php" class="w-full t-input border rounded-lg px-3 py-2 text-sm" />
+          <input type="text" id="proxyUrl" value="api.php" class="w-full t-input border rounded-lg px-3 py-2 text-sm" title="Usually api.php in the same folder as index.html" />
           <div id="proxyStatusWrap" class="flex items-center gap-2 mt-1.5 flex-wrap">
             <span id="proxyStatusDot" class="proxy-dot checking"></span>
             <span id="proxyStatusText" class="text-[11px] t-text-dim">Checking proxy…</span>
             <button type="button" id="testProxyBtn" class="text-[11px] t-accent hover:underline">Test</button>
           </div>
           <p id="proxyStatusHelp" class="hidden text-[11px] mt-1 text-red-400/90"></p>
-          <p id="proxyUrlHint" class="text-[11px] t-text-dim mt-0.5">Use when Direct fails (CORS). DeepSeek often works without proxy.</p>
+          <p id="proxyUrlHint" class="text-[11px] t-text-dim mt-0.5">Upload api.php next to this page — leave as api.php</p>
         </div>
         <div>
           <label class="block text-xs font-medium t-text-muted mb-1">API Key <span id="keyOptional" class="t-text-dim hidden">(optional)</span></label>
           <div class="relative">
-            <input type="password" id="apiKey" class="w-full t-input border rounded-lg px-3 py-2 pr-9 text-sm" autocomplete="off" />
+            <input type="password" id="apiKey" class="w-full t-input border rounded-lg px-3 py-2 pr-9 text-sm" autocomplete="off" title="From your AI provider account — not included with this app" />
             <button type="button" id="toggleKey" class="absolute right-2 top-1/2 -translate-y-1/2 t-text-dim t-hover p-1 rounded" title="Show/hide key">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
             </button>
@@ -115,13 +115,13 @@
         </div>
         <div>
           <label class="block text-xs font-medium t-text-muted mb-1">Model</label>
-          <input type="text" id="model" class="w-full t-input border rounded-lg px-3 py-2 text-sm" />
+          <input type="text" id="model" class="w-full t-input border rounded-lg px-3 py-2 text-sm" title="Pre-filled per provider — change only if you know another model id" />
           <p id="modelHint" class="text-[11px] t-text-dim mt-0.5"></p>
         </div>
         <div id="baseUrlWrap">
           <label class="block text-xs font-medium t-text-muted mb-1">Base URL <span id="baseUrlLabelOpt" class="t-text-dim">(opt)</span></label>
           <input type="text" id="baseUrl" class="w-full t-input border rounded-lg px-3 py-2 text-sm" />
-          <p id="customProviderHint" class="hidden text-[11px] t-accent mt-1 leading-relaxed">OpenAI-compatible endpoint. Base URL and Model are required. Proxy allows the hostname from your Base URL automatically.</p>
+          <p id="customProviderHint" class="hidden text-[11px] t-accent mt-1 leading-relaxed">Custom gateway: set Base URL and Model (advanced).</p>
         </div>
         <button type="button" id="resetProviderDefaults"
           class="w-full py-1.5 text-xs t-text-muted border t-border rounded-lg t-hover transition-colors"
@@ -142,8 +142,8 @@
             </div>
             <div>
               <label class="flex items-center text-xs t-text-muted mb-1">
-                Max tokens
-                <span class="tip-btn" title="Max reply length. Default 4096. Increase only if output is cut off.">?</span>
+                Reply length
+                <span class="tip-btn" title="How long the AI reply can be. Default 4096. Raise only if output is cut off.">?</span>
               </label>
               <input type="number" id="maxTokens" value="4096" min="256" max="128000" step="256" class="w-full t-input border rounded-lg px-3 py-1.5 text-sm mb-1" />
               <div class="flex gap-1">
@@ -153,8 +153,8 @@
               </div>
             </div>
             <label class="flex items-center gap-2 text-xs t-text-muted cursor-pointer">
-              <input type="checkbox" id="useStream" class="rounded accent-[var(--t-accent)]" />
-              Stream response <span class="t-text-dim">(proxy + compatible APIs)</span>
+              <input type="checkbox" id="useStream" class="rounded accent-[var(--t-accent)]" title="Show the reply as it is generated (needs working proxy)" />
+              Stream response
             </label>
             <div class="border-t t-border pt-2">
               <p class="text-xs font-medium t-heading mb-2">White label</p>
@@ -168,7 +168,7 @@
 
         <button type="button" id="saveConfig" class="w-full py-2 rounded-lg t-accent-bg text-white text-sm font-medium">Save Configuration</button>
         <p id="saveStatus" class="text-xs text-center text-emerald-400 hidden">Saved locally</p>
-        <p class="text-[11px] t-text-dim">Keys stored in browser only.</p>
+        <p class="text-[11px] t-text-dim">Key stays in this browser only · open via http(s), not file://</p>
       </div>
     </aside>
 
@@ -413,7 +413,7 @@
       }
       const useSaved = isSavedConfigValidForProvider(id);
       $('providerBadge').textContent = p.label;
-      $('modelHint').textContent = p.modelHint;
+      $('modelHint').textContent = p.isCustom ? p.modelHint : `${p.modelHint} · default is fine`;
       $('model').placeholder = p.defaultModel;
       $('apiKey').placeholder = p.keyPlaceholder || 'API key';
       $('keyOptional').classList.toggle('hidden', p.keyRequired !== false);
@@ -470,7 +470,7 @@
       text.className = 'text-[11px] ' + (state === 'fail' ? 'text-red-400' : state === 'ok' ? 'text-emerald-400' : 't-text-dim');
       if (showHelp && state === 'fail') {
         help.classList.remove('hidden');
-        help.innerHTML = `<span class="proxy-help" id="proxyDocLink">Proxy unreachable — open setup guide →</span>`;
+        help.innerHTML = `<span class="proxy-help" id="proxyDocLink">Cannot reach proxy — setup guide →</span>`;
         $('proxyDocLink').onclick = () => window.open(getProxyDocUrl(), '_blank');
       } else {
         help.classList.add('hidden');
@@ -526,7 +526,7 @@
       const hint = $('proxyUrlHint');
       if (mode === 'direct') {
         config.connectionMode = mode;
-        setProxyStatus('idle', 'Direct — browser calls API', false);
+        setProxyStatus('idle', 'Direct — no proxy file needed', false);
         proxyReachable = true;
         return;
       }
@@ -534,9 +534,9 @@
       config.proxyUrls = config.proxyUrls || {};
       $('proxyUrl').value = config.proxyUrls[key] || PROXY_DEFAULTS[key];
       if (mode === 'node') {
-        hint.textContent = 'Run: node proxy/server.js — default http://localhost:8787/proxy';
+        hint.textContent = 'Run node proxy/server.js first';
       } else {
-        hint.textContent = 'Recommended for production. Optional if Direct works (e.g. DeepSeek).';
+        hint.textContent = 'Same folder as index.html — default api.php';
       }
       config.connectionMode = mode;
       scheduleProxyProbe();
@@ -856,7 +856,7 @@
         });
       } catch (err) {
         let msg = err.message || String(err);
-        if (msg.includes('Failed to fetch')) msg += ' — Try PHP Proxy mode and upload api.php.';
+        if (msg.includes('Failed to fetch')) msg = 'Browser cannot reach this AI API directly. Use PHP Proxy, upload api.php, click Test until green.';
         setResultState('error', msg);
       } finally {
         $('debugBtn').disabled = false;
