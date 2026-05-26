@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="midnight">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Code Debugger Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link id="hljsTheme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/rust.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/php.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/ruby.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+  <style>
+    [data-theme="midnight"]{--t-bg:#0f1419;--t-bg-raised:#1a2332;--t-border:#2d3a4f;--t-text:#e2e8f0;--t-text-muted:#94a3b8;--t-text-dim:#64748b;--t-heading:#fff;--t-input-bg:#0f1419;--t-caret:#e2e8f0;--t-accent:#22d3ee;--t-accent-hover:#06b6d4;--t-accent-muted:rgba(34,211,238,.15);--t-accent-border:rgba(34,211,238,.35);--t-btn-from:#059669;--t-btn-to:#0891b2;--t-badge-bg:rgba(34,211,238,.1);--t-scroll-track:#1a2332;--t-scroll-thumb:#3d4f66;--t-logo-from:#06b6d4;--t-logo-to:#059669;--t-toast:#059669;--t-spinner:#22d3ee;--t-diff-add:rgba(16,185,129,.2);--t-diff-del:rgba(239,68,68,.2);}
+    [data-theme="light"]{--t-bg:#f8fafc;--t-bg-raised:#fff;--t-border:#e2e8f0;--t-text:#1e293b;--t-text-muted:#475569;--t-text-dim:#64748b;--t-heading:#0f172a;--t-input-bg:#f1f5f9;--t-caret:#0f172a;--t-accent:#0284c7;--t-accent-hover:#0369a1;--t-accent-muted:rgba(2,132,199,.1);--t-accent-border:rgba(2,132,199,.35);--t-btn-from:#059669;--t-btn-to:#0284c7;--t-badge-bg:rgba(2,132,199,.1);--t-scroll-track:#f1f5f9;--t-scroll-thumb:#cbd5e1;--t-logo-from:#0284c7;--t-logo-to:#059669;--t-toast:#059669;--t-spinner:#0284c7;--t-diff-add:rgba(16,185,129,.15);--t-diff-del:rgba(239,68,68,.15);}
+    [data-theme="purple"]{--t-bg:#13111c;--t-bg-raised:#1e1b2e;--t-border:#3b3560;--t-text:#e2e8f0;--t-text-muted:#a5b4fc;--t-text-dim:#818cf8;--t-heading:#f5f3ff;--t-input-bg:#13111c;--t-caret:#e2e8f0;--t-accent:#a78bfa;--t-accent-hover:#8b5cf6;--t-accent-muted:rgba(167,139,250,.15);--t-accent-border:rgba(167,139,250,.4);--t-btn-from:#7c3aed;--t-btn-to:#a78bfa;--t-badge-bg:rgba(167,139,250,.12);--t-scroll-track:#1e1b2e;--t-scroll-thumb:#4c4578;--t-logo-from:#8b5cf6;--t-logo-to:#c084fc;--t-toast:#7c3aed;--t-spinner:#a78bfa;--t-diff-add:rgba(16,185,129,.2);--t-diff-del:rgba(239,68,68,.2);}
+    [data-theme="ocean"]{--t-bg:#0c1222;--t-bg-raised:#152238;--t-border:#2a4066;--t-text:#dbeafe;--t-text-muted:#93c5fd;--t-text-dim:#60a5fa;--t-heading:#eff6ff;--t-input-bg:#0c1222;--t-caret:#dbeafe;--t-accent:#38bdf8;--t-accent-hover:#0ea5e9;--t-accent-muted:rgba(56,189,248,.15);--t-accent-border:rgba(56,189,248,.4);--t-btn-from:#0369a1;--t-btn-to:#38bdf8;--t-badge-bg:rgba(56,189,248,.12);--t-scroll-track:#152238;--t-scroll-thumb:#3b5f8f;--t-logo-from:#0ea5e9;--t-logo-to:#38bdf8;--t-toast:#0369a1;--t-spinner:#38bdf8;--t-diff-add:rgba(16,185,129,.2);--t-diff-del:rgba(239,68,68,.2);}
+    [data-theme="sunset"]{--t-bg:#1a1210;--t-bg-raised:#2a1f1a;--t-border:#4a3528;--t-text:#fed7aa;--t-text-muted:#fdba74;--t-text-dim:#fb923c;--t-heading:#fff7ed;--t-input-bg:#1a1210;--t-caret:#fed7aa;--t-accent:#fb923c;--t-accent-hover:#f97316;--t-accent-muted:rgba(251,146,60,.15);--t-accent-border:rgba(251,146,60,.4);--t-btn-from:#c2410c;--t-btn-to:#fb923c;--t-badge-bg:rgba(251,146,60,.12);--t-scroll-track:#2a1f1a;--t-scroll-thumb:#6b4c38;--t-logo-from:#ea580c;--t-logo-to:#fb923c;--t-toast:#c2410c;--t-spinner:#fb923c;--t-diff-add:rgba(16,185,129,.2);--t-diff-del:rgba(239,68,68,.2);}
+    body{background:var(--t-bg);color:var(--t-text);transition:background .25s,color .25s;}
+    .t-bg{background:var(--t-bg)}.t-bg-raised{background:var(--t-bg-raised)}.t-border{border-color:var(--t-border)}
+    .t-text-muted{color:var(--t-text-muted)}.t-text-dim{color:var(--t-text-dim)}.t-heading{color:var(--t-heading)}
+    .t-input{background:var(--t-input-bg);border-color:var(--t-border);color:var(--t-heading)}
+    .t-input::placeholder{color:var(--t-text-dim)}.t-input:focus{border-color:var(--t-accent);box-shadow:0 0 0 2px var(--t-accent-muted);outline:none}
+    .t-accent{color:var(--t-accent)}.t-accent-bg{background:var(--t-accent)}.t-accent-bg:hover{background:var(--t-accent-hover)}
+    .t-badge{background:var(--t-badge-bg);color:var(--t-accent);border:1px solid var(--t-accent-border)}
+    .t-btn-debug{background:linear-gradient(to right,var(--t-btn-from),var(--t-btn-to))}.t-btn-debug:hover{filter:brightness(1.1)}
+    .t-logo{background:linear-gradient(135deg,var(--t-logo-from),var(--t-logo-to))}.t-spinner{border-color:var(--t-spinner);border-top-color:transparent}
+    .t-toast{background:var(--t-toast)}.t-hover:hover{background:var(--t-border);color:var(--t-heading)}.t-range{accent-color:var(--t-accent)}
+    .t-tab-active{color:var(--t-accent);border-bottom:2px solid var(--t-accent)}.t-preset.active{background:var(--t-accent-muted);color:var(--t-accent);border-color:var(--t-accent)}
+    .tip-btn{width:16px;height:16px;border-radius:50%;border:1px solid var(--t-border);font-size:10px;line-height:1;display:inline-flex;align-items:center;justify-content:center;cursor:help;color:var(--t-text-dim);vertical-align:middle;margin-left:4px}
+    .proxy-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    .proxy-dot.checking{background:#94a3b8;animation:pulse 1s infinite}
+    .proxy-dot.ok{background:#10b981}.proxy-dot.fail{background:#ef4444}
+    @keyframes pulse{50%{opacity:.4}}
+    .proxy-help{cursor:pointer;text-decoration:underline;color:var(--t-accent)}
+    .code-editor-wrap{position:relative}.code-editor-wrap textarea,.code-editor-wrap pre{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.5;tab-size:2;padding:12px;margin:0;border:0;width:100%;min-height:100%;box-sizing:border-box;white-space:pre}
+    .code-editor-wrap pre{position:absolute;inset:0;pointer-events:none;overflow:auto;background:transparent!important}
+    .code-editor-wrap textarea{position:relative;z-index:1;resize:none;color:transparent;caret-color:var(--t-caret);background:transparent}
+    .code-editor-wrap pre code,.hljs{background:transparent!important;padding:0!important}
+    .result-pre pre{margin:0;padding:12px;font-size:13px;line-height:1.5}
+    .diff-line{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;line-height:1.45;padding:1px 8px;white-space:pre-wrap;word-break:break-all}
+    .diff-add{background:var(--t-diff-add)}.diff-del{background:var(--t-diff-del)}.diff-same{opacity:.75}
+    .modal-backdrop{background:rgba(0,0,0,.55)}.history-item:hover{background:var(--t-border)}
+    details summary{cursor:pointer;list-style:none}details summary::-webkit-details-marker{display:none}
+    ::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-track{background:var(--t-scroll-track)}::-webkit-scrollbar-thumb{background:var(--t-scroll-thumb);border-radius:4px}
+  </style>
+</head>
+<body class="h-screen flex flex-col antialiased overflow-hidden">
+
+  <header class="border-b t-border t-bg-raised/80 backdrop-blur px-4 py-3 flex items-center justify-between shrink-0 gap-2">
+    <div class="flex items-center gap-3 min-w-0">
+      <div id="logoBox" class="w-9 h-9 rounded-lg t-logo flex items-center justify-center font-bold text-white text-sm shrink-0">CD</div>
+      <div class="min-w-0">
+        <h1 id="appTitle" class="text-lg font-semibold t-heading tracking-tight truncate">Code Debugger Pro</h1>
+        <p id="appTagline" class="text-xs t-text-dim truncate">Multi-LLM code repair workspace</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-1.5 shrink-0 flex-wrap justify-end">
+      <button type="button" id="historyBtn" class="text-xs t-text-dim t-hover px-2 py-1.5 rounded border t-border" title="History">History</button>
+      <select id="themeSelect" class="t-input border rounded-lg px-2 py-1.5 text-xs max-w-[100px]">
+        <option value="midnight">Midnight</option><option value="light">Light</option><option value="purple">Purple</option>
+        <option value="ocean">Ocean</option><option value="sunset">Sunset</option>
+      </select>
+      <span id="providerBadge" class="text-xs px-2 py-1 rounded-full t-badge font-medium hidden md:inline">OpenAI</span>
+      <span class="text-[10px] t-text-dim hidden sm:inline">v2.1.0</span>
+    </div>
+  </header>
+
+  <main class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-0 min-h-0 overflow-hidden">
+    <aside class="lg:col-span-3 border-b lg:border-b-0 lg:border-r t-border t-bg-raised flex flex-col overflow-y-auto">
+      <div class="p-4 border-b t-border"><h2 class="text-sm font-semibold t-heading uppercase tracking-wider">API Configuration</h2></div>
+      <div class="p-4 space-y-3 flex-1">
+        <div>
+          <label class="block text-xs font-medium t-text-muted mb-1">Provider</label>
+          <select id="provider" class="w-full t-input border rounded-lg px-3 py-2 text-sm"></select>
+        </div>
+        <div>
+          <label class="block text-xs font-medium t-text-muted mb-1">Connection</label>
+          <select id="connectionMode" class="w-full t-input border rounded-lg px-3 py-2 text-sm">
+            <option value="direct">Direct (browser)</option>
+            <option value="php">PHP Proxy (recommended)</option>
+            <option value="node">Node Proxy</option>
+          </select>
+        </div>
+        <div id="proxyUrlWrap">
+          <label class="block text-xs font-medium t-text-muted mb-1">Proxy URL</label>
+          <input type="text" id="proxyUrl" value="api.php" class="w-full t-input border rounded-lg px-3 py-2 text-sm" />
+          <div id="proxyStatusWrap" class="flex items-center gap-2 mt-1.5 flex-wrap">
+            <span id="proxyStatusDot" class="proxy-dot checking"></span>
+            <span id="proxyStatusText" class="text-[11px] t-text-dim">Checking proxy…</span>
+            <button type="button" id="testProxyBtn" class="text-[11px] t-accent hover:underline">Test</button>
+          </div>
+          <p id="proxyStatusHelp" class="hidden text-[11px] mt-1 text-red-400/90"></p>
+          <p id="proxyUrlHint" class="text-[11px] t-text-dim mt-0.5">Use when Direct fails (CORS). DeepSeek often works without proxy.</p>
+        </div>
+        <div>
+          <label class="block text-xs font-medium t-text-muted mb-1">API Key <span id="keyOptional" class="t-text-dim hidden">(optional)</span></label>
+          <div class="relative">
+            <input type="password" id="apiKey" class="w-full t-input border rounded-lg px-3 py-2 pr-9 text-sm" autocomplete="off" />
+            <button type="button" id="toggleKey" class="absolute right-2 top-1/2 -translate-y-1/2 t-text-dim t-hover p-1 rounded" title="Show/hide key">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            </button>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium t-text-muted mb-1">Model</label>
+          <input type="text" id="model" class="w-full t-input border rounded-lg px-3 py-2 text-sm" />
+          <p id="modelHint" class="text-[11px] t-text-dim mt-0.5"></p>
+        </div>
+        <div id="baseUrlWrap">
+          <label class="block text-xs font-medium t-text-muted mb-1">Base URL <span id="baseUrlLabelOpt" class="t-text-dim">(opt)</span></label>
+          <input type="text" id="baseUrl" class="w-full t-input border rounded-lg px-3 py-2 text-sm" />
+          <p id="customProviderHint" class="hidden text-[11px] t-accent mt-1 leading-relaxed">OpenAI-compatible endpoint. Base URL and Model are required. Proxy allows the hostname from your Base URL automatically.</p>
+        </div>
+        <button type="button" id="resetProviderDefaults"
+          class="w-full py-1.5 text-xs t-text-muted border t-border rounded-lg t-hover transition-colors"
+          title="Restore default model and base URL for the selected provider">
+          Reset model &amp; URL to defaults
+        </button>
+
+        <details id="advancedPanel" class="border t-border rounded-lg">
+          <summary class="px-3 py-2 text-xs font-medium t-text-muted">Advanced options</summary>
+          <div class="px-3 pb-3 space-y-3 border-t t-border pt-3">
+            <div>
+              <label class="flex items-center text-xs t-text-muted mb-1">
+                Temperature <span id="tempVal" class="t-accent ml-1">0.2</span>
+                <span class="tip-btn" title="Randomness. Default 0.2 is best for bug fixes. Use 0.4–0.6 for alternatives. Avoid 0.7+.">?</span>
+              </label>
+              <input type="range" id="temperature" min="0" max="1" step="0.1" value="0.2" class="w-full t-range" />
+              <p class="text-[11px] t-text-dim">Default 0.2 — no change needed for most cases</p>
+            </div>
+            <div>
+              <label class="flex items-center text-xs t-text-muted mb-1">
+                Max tokens
+                <span class="tip-btn" title="Max reply length. Default 4096. Increase only if output is cut off.">?</span>
+              </label>
+              <input type="number" id="maxTokens" value="4096" min="256" max="128000" step="256" class="w-full t-input border rounded-lg px-3 py-1.5 text-sm mb-1" />
+              <div class="flex gap-1">
+                <button type="button" class="token-preset text-[10px] px-2 py-0.5 rounded border t-border t-text-dim" data-v="2048">2K</button>
+                <button type="button" class="token-preset text-[10px] px-2 py-0.5 rounded border t-border t-text-dim t-preset active" data-v="4096">4K</button>
+                <button type="button" class="token-preset text-[10px] px-2 py-0.5 rounded border t-border t-text-dim" data-v="8192">8K</button>
+              </div>
+            </div>
+            <label class="flex items-center gap-2 text-xs t-text-muted cursor-pointer">
+              <input type="checkbox" id="useStream" class="rounded accent-[var(--t-accent)]" />
+              Stream response <span class="t-text-dim">(proxy + compatible APIs)</span>
+            </label>
+            <div class="border-t t-border pt-2">
+              <p class="text-xs font-medium t-heading mb-2">White label</p>
+              <input type="text" id="wlTitle" placeholder="App title" class="w-full t-input border rounded px-2 py-1 text-xs mb-1" />
+              <input type="text" id="wlTagline" placeholder="Tagline" class="w-full t-input border rounded px-2 py-1 text-xs mb-1" />
+              <input type="text" id="wlLogo" placeholder="Logo text (2 chars)" maxlength="3" class="w-full t-input border rounded px-2 py-1 text-xs mb-1" />
+              <label class="flex items-center gap-2 text-[11px] t-text-dim cursor-pointer"><input type="checkbox" id="wlHideFooter" /> Hide footer</label>
+            </div>
+          </div>
+        </details>
+
+        <button type="button" id="saveConfig" class="w-full py-2 rounded-lg t-accent-bg text-white text-sm font-medium">Save Configuration</button>
+        <p id="saveStatus" class="text-xs text-center text-emerald-400 hidden">Saved locally</p>
+        <p class="text-[11px] t-text-dim">Keys stored in browser only.</p>
+      </div>
+    </aside>
+
+    <section class="lg:col-span-4 flex flex-col border-b lg:border-b-0 lg:border-r t-border min-h-[280px] lg:min-h-0">
+      <div class="px-3 py-2 border-b t-border flex items-center justify-between gap-2 shrink-0 flex-wrap">
+        <h2 class="text-sm font-semibold t-heading uppercase tracking-wider">Broken Code</h2>
+        <div class="flex items-center gap-1.5">
+          <select id="examples" class="t-input border rounded px-2 py-1 text-[11px] t-text-muted max-w-[130px]">
+            <option value="">Examples…</option>
+          </select>
+          <select id="inputLang" class="t-input border rounded px-2 py-1 text-[11px] t-text-muted"></select>
+          <button type="button" id="clearInput" class="text-[11px] t-text-dim t-hover px-2 py-1 rounded">Clear</button>
+        </div>
+      </div>
+      <div class="flex-1 relative min-h-0 code-editor-wrap t-bg">
+        <pre id="inputHighlight" aria-hidden="true"><code class="language-javascript"></code></pre>
+        <textarea id="codeInput" spellcheck="false" placeholder="// Paste buggy code…"></textarea>
+      </div>
+      <div class="px-3 py-2 border-t t-border shrink-0">
+        <input type="text" id="errorMsg" placeholder="Error message (optional)" class="w-full t-input border rounded-lg px-3 py-2 text-sm mb-2" />
+        <button type="button" id="debugBtn" class="w-full py-2.5 rounded-lg t-btn-debug text-white font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-50">
+          <span id="debugBtnText">Fix Code</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="lg:col-span-5 flex flex-col min-h-[280px] lg:min-h-0">
+      <div class="px-3 py-2 border-b t-border flex items-center justify-between gap-2 shrink-0">
+        <div class="flex gap-3 text-xs font-medium">
+          <button type="button" data-tab="fixed" class="result-tab t-tab-active pb-1">Fixed</button>
+          <button type="button" data-tab="diff" class="result-tab t-text-dim pb-1">Diff</button>
+        </div>
+        <div class="flex items-center gap-1">
+          <select id="resultLang" class="t-input border rounded px-2 py-1 text-[11px] t-text-muted"></select>
+          <button type="button" id="copyResult" disabled class="p-1 rounded t-text-dim t-hover disabled:opacity-30" title="Copy">⎘</button>
+          <button type="button" id="downloadResult" disabled class="p-1 rounded t-text-dim t-hover disabled:opacity-30" title="Download">↓</button>
+          <button type="button" id="exportJson" disabled class="p-1 rounded t-text-dim t-hover disabled:opacity-30 text-[10px]" title="Export JSON">JSON</button>
+        </div>
+      </div>
+      <div id="resultArea" class="flex-1 overflow-hidden flex flex-col min-h-0 t-bg">
+        <div id="resultPlaceholder" class="flex-1 flex items-center justify-center p-6 text-center t-text-dim text-sm">Run debug to see results</div>
+        <div id="resultContent" class="hidden flex-1 flex flex-col min-h-0 overflow-hidden">
+          <div id="resultExplanation" class="px-3 py-2 text-sm t-text-muted border-b t-border max-h-[28%] overflow-y-auto shrink-0"></div>
+          <div id="panelFixed" class="result-panel flex-1 min-h-0 overflow-auto result-pre"><pre><code id="resultCode"></code></pre></div>
+          <div id="panelDiff" class="result-panel hidden flex-1 min-h-0 overflow-auto p-2"><div id="diffView"></div></div>
+        </div>
+        <div id="resultError" class="hidden flex-1 p-4"><div class="rounded-lg bg-red-500/10 border border-red-500/30 p-3 text-sm text-red-400"></div></div>
+        <div id="resultLoading" class="hidden flex-1 flex items-center justify-center flex-col gap-2">
+          <div class="w-9 h-9 border-2 t-spinner rounded-full animate-spin"></div>
+          <p class="text-sm t-text-dim" id="loadingText">Analyzing…</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="appFooter" class="shrink-0 border-t t-border px-4 py-1.5 flex items-center justify-between text-[11px] t-text-dim">
+    <span>Code Debugger Pro v2.1.0</span>
+    <a href="documentation/index.html" target="_blank" class="t-accent hover:underline">Documentation</a>
+  </footer>
+
+  <div id="historyModal" class="fixed inset-0 modal-backdrop z-40 hidden items-center justify-center p-4">
+    <div class="t-bg-raised border t-border rounded-xl w-full max-w-md max-h-[70vh] flex flex-col shadow-xl">
+      <div class="flex items-center justify-between px-4 py-3 border-b t-border">
+        <h3 class="text-sm font-semibold t-heading">Debug History</h3>
+        <button type="button" id="closeHistory" class="t-text-dim t-hover px-2 rounded">✕</button>
+      </div>
+      <div id="historyList" class="flex-1 overflow-y-auto p-2 text-sm"></div>
+      <div class="p-2 border-t t-border"><button type="button" id="clearHistory" class="text-xs t-text-dim t-hover w-full py-1 rounded">Clear all</button></div>
+    </div>
+  </div>
+
+  <div id="toast" class="fixed bottom-4 right-4 px-4 py-2 rounded-lg t-toast text-white text-sm shadow-lg translate-y-20 opacity-0 transition-all z-50 pointer-events-none"></div>
+
+  <script>
+    const APP_VERSION = '2.1.0';
+    const STORAGE_KEY = 'codeDebuggerPro_config';
+    const LEGACY_STORAGE_KEY = 'aiCodeDebugger_config';
+    const HISTORY_KEY = 'codeDebuggerPro_history';
+    const LEGACY_HISTORY_KEY = 'aiCodeDebugger_history';
+    const HLJS_DARK = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css';
+    const HLJS_LIGHT = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css';
+    const LANGS = ['javascript','python','typescript','java','cpp','go','rust','php','ruby','sql','html','css','json','bash','plaintext'];
+    const PROXY_DEFAULTS = { php: 'api.php', node: 'http://localhost:8787/proxy' };
+
+    const EXAMPLES = [
+      { id:'js-divide', name:'JS: missing arg', lang:'javascript', error:'undefined result', code:'function divide(a, b) {\n  return a / b;\n}\nconsole.log(divide(10));' },
+      { id:'js-zero', name:'JS: divide by zero', lang:'javascript', error:'Infinity', code:'function avg(arr) {\n  let sum = 0;\n  for (let i = 0; i <= arr.length; i++) sum += arr[i];\n  return sum / arr.length;\n}\nconsole.log(avg([1,2,3]));' },
+      { id:'py-index', name:'Python: index error', lang:'python', error:'IndexError', code:'items = [1, 2, 3]\nfor i in range(4):\n    print(items[i])' },
+      { id:'ts-null', name:'TS: null check', lang:'typescript', error:"Cannot read properties of null", code:'function getLength(s: string | null) {\n  return s.length;\n}\nconsole.log(getLength(null));' },
+      { id:'sql-join', name:'SQL: bad join', lang:'sql', error:'ambiguous column', code:'SELECT name, id FROM users u, orders o WHERE u.id = user_id;' },
+      { id:'php-syntax', name:'PHP: syntax', lang:'php', error:'Parse error', code:"<?php\necho 'Hello'\nfunction foo() {\n  return 1\n}" }
+    ];
+
+    const PROVIDERS = {
+      openai:{label:'OpenAI',group:'Major',apiType:'openai',defaultModel:'gpt-4o-mini',modelHint:'gpt-4o-mini, gpt-4o',defaultBase:'https://api.openai.com/v1',keyPlaceholder:'sk-...',keyRequired:true,streamable:true},
+      gemini:{label:'Google Gemini',group:'Major',apiType:'gemini',defaultModel:'gemini-2.0-flash',modelHint:'gemini-2.0-flash',defaultBase:'',keyPlaceholder:'AIza...',keyRequired:true,hideBaseUrl:true},
+      claude:{label:'Anthropic Claude',group:'Major',apiType:'claude',defaultModel:'claude-3-5-haiku-20241022',modelHint:'claude-3-5-sonnet',defaultBase:'https://api.anthropic.com',keyPlaceholder:'sk-ant-...',keyRequired:true},
+      groq:{label:'Groq',group:'Fast',apiType:'openai',defaultModel:'llama-3.3-70b-versatile',modelHint:'llama-3.3-70b',defaultBase:'https://api.groq.com/openai/v1',keyPlaceholder:'gsk_...',keyRequired:true,streamable:true},
+      deepseek:{label:'DeepSeek',group:'Fast',apiType:'openai',defaultModel:'deepseek-chat',modelHint:'deepseek-chat',defaultBase:'https://api.deepseek.com/v1',keyPlaceholder:'sk-...',keyRequired:true,streamable:true},
+      mistral:{label:'Mistral AI',group:'Fast',apiType:'openai',defaultModel:'mistral-small-latest',modelHint:'mistral-small-latest',defaultBase:'https://api.mistral.ai/v1',keyPlaceholder:'...',keyRequired:true,streamable:true},
+      openrouter:{label:'OpenRouter',group:'Aggregators',apiType:'openai',defaultModel:'openai/gpt-4o-mini',modelHint:'openai/gpt-4o-mini',defaultBase:'https://openrouter.ai/api/v1',keyPlaceholder:'sk-or-...',keyRequired:true,openRouter:true,streamable:true},
+      together:{label:'Together AI',group:'Aggregators',apiType:'openai',defaultModel:'meta-llama/Llama-3.3-70B-Instruct-Turbo',modelHint:'See together.ai',defaultBase:'https://api.together.xyz/v1',keyPlaceholder:'...',keyRequired:true,streamable:true},
+      xai:{label:'xAI (Grok)',group:'Major',apiType:'openai',defaultModel:'grok-2-latest',modelHint:'grok-2-latest',defaultBase:'https://api.x.ai/v1',keyPlaceholder:'xai-...',keyRequired:true,streamable:true},
+      cohere:{label:'Cohere',group:'Major',apiType:'cohere',defaultModel:'command-r-plus-08-2024',modelHint:'command-r-plus',defaultBase:'https://api.cohere.com',keyPlaceholder:'...',keyRequired:true},
+      ollama:{label:'Ollama (Local)',group:'Local',apiType:'openai',defaultModel:'llama3.2',modelHint:'llama3.2, codellama',defaultBase:'http://localhost:11434/v1',keyPlaceholder:'Optional',keyRequired:false,streamable:true},
+      azure:{label:'Azure OpenAI',group:'Enterprise',apiType:'openai',defaultModel:'gpt-4o',modelHint:'Deployment name',defaultBase:'https://RESOURCE.openai.azure.com/openai/deployments/DEPLOY/chat/completions?api-version=2024-08-01-preview',keyPlaceholder:'Azure key',keyRequired:true,streamable:true},
+      perplexity:{label:'Perplexity',group:'Fast',apiType:'openai',defaultModel:'sonar',modelHint:'sonar, sonar-pro',defaultBase:'https://api.perplexity.ai',keyPlaceholder:'pplx-...',keyRequired:true,streamable:true},
+      fireworks:{label:'Fireworks AI',group:'Fast',apiType:'openai',defaultModel:'accounts/fireworks/models/llama-v3p3-70b-instruct',modelHint:'fireworks.ai/models',defaultBase:'https://api.fireworks.ai/inference/v1',keyPlaceholder:'fw_...',keyRequired:true,streamable:true},
+      custom:{label:'Custom (OpenAI-compatible)',group:'Custom',apiType:'openai',defaultModel:'',modelHint:'Required — your provider model id',defaultBase:'https://api.example.com/v1',keyPlaceholder:'API key',keyRequired:true,streamable:true,isCustom:true,baseRequired:true}
+    };
+
+    const $ = (id) => document.getElementById(id);
+    let config = loadConfig();
+    let lastResultText = '', lastFullResponse = '', lastOriginalCode = '', activeResultTab = 'fixed';
+
+    function loadConfig() {
+      const defaults = { theme:'midnight', provider:'openai', connectionMode:'php', proxyUrls:{ php:'api.php', node:PROXY_DEFAULTS.node }, keys:{}, models:{}, baseUrls:{}, temperature:0.2, maxTokens:4096, useStream:true, whiteLabel:{} };
+      try {
+        let raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw && localStorage.getItem(LEGACY_STORAGE_KEY)) {
+          raw = localStorage.getItem(LEGACY_STORAGE_KEY);
+          localStorage.setItem(STORAGE_KEY, raw);
+        }
+        if (raw) {
+          const c = { ...defaults, ...JSON.parse(raw) };
+          if (c.proxyUrl && !c.proxyUrls) c.proxyUrls = { php: c.proxyUrl, node: PROXY_DEFAULTS.node };
+          return c;
+        }
+      } catch (_) {}
+      return defaults;
+    }
+
+    function loadHistoryList() {
+      try {
+        let raw = localStorage.getItem(HISTORY_KEY);
+        if (!raw && localStorage.getItem(LEGACY_HISTORY_KEY)) {
+          raw = localStorage.getItem(LEGACY_HISTORY_KEY);
+          localStorage.setItem(HISTORY_KEY, raw);
+        }
+        return JSON.parse(raw || '[]');
+      } catch (_) { return []; }
+    }
+
+    function persistProviderFields(providerId) {
+      if (!providerId) return;
+      config.keys = config.keys || {};
+      config.models = config.models || {};
+      config.baseUrls = config.baseUrls || {};
+      config.keys[providerId] = $('apiKey').value.trim();
+      config.models[providerId] = $('model').value.trim();
+      config.baseUrls[providerId] = $('baseUrl').value.trim();
+    }
+
+    function saveConfigToStorage() {
+      const p = $('provider').value;
+      const mode = $('connectionMode').value;
+      config.provider = p;
+      persistProviderFields(p);
+      config.theme = $('themeSelect').value;
+      config.connectionMode = mode;
+      config.proxyUrls = config.proxyUrls || {};
+      config.proxyUrls[mode] = $('proxyUrl').value.trim();
+      config.temperature = parseFloat($('temperature').value);
+      config.maxTokens = parseInt($('maxTokens').value, 10) || 4096;
+      config.useStream = $('useStream').checked;
+      config.whiteLabel = {
+        title: $('wlTitle').value.trim(),
+        tagline: $('wlTagline').value.trim(),
+        logo: $('wlLogo').value.trim(),
+        hideFooter: $('wlHideFooter').checked
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
+    }
+
+    function useProxy() { return config.connectionMode !== 'direct'; }
+    function getProxyEndpoint() {
+      const mode = config.connectionMode === 'node' ? 'node' : 'php';
+      return config.proxyUrls?.[mode] || PROXY_DEFAULTS[mode];
+    }
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      $('hljsTheme').href = theme === 'light' ? HLJS_LIGHT : HLJS_DARK;
+      if (lastResultText) highlightResult(lastResultText, $('resultLang').value);
+      syncInputHighlight();
+    }
+
+    function applyWhiteLabel() {
+      const wl = config.whiteLabel || {};
+      $('appTitle').textContent = wl.title || 'Code Debugger Pro';
+      $('appTagline').textContent = wl.tagline || 'Multi-LLM code repair workspace';
+      $('logoBox').textContent = (wl.logo || 'CD').slice(0, 3);
+      document.title = wl.title || 'Code Debugger Pro';
+      $('appFooter').classList.toggle('hidden', !!wl.hideFooter);
+      $('wlTitle').value = wl.title || '';
+      $('wlTagline').value = wl.tagline || '';
+      $('wlLogo').value = wl.logo || '';
+      $('wlHideFooter').checked = !!wl.hideFooter;
+    }
+
+    function buildSelects() {
+      const groups = {};
+      Object.entries(PROVIDERS).forEach(([id, p]) => { (groups[p.group] ||= []).push({ id, label: p.label }); });
+      $('provider').innerHTML = '';
+      Object.keys(groups).forEach((g) => {
+        const og = document.createElement('optgroup');
+        og.label = g;
+        groups[g].forEach(({ id, label }) => { const o = document.createElement('option'); o.value = id; o.textContent = label; og.appendChild(o); });
+        $('provider').appendChild(og);
+      });
+      const langOpts = LANGS.map((l) => `<option value="${l}">${l === 'cpp' ? 'C++' : l[0].toUpperCase() + l.slice(1)}</option>`).join('');
+      $('inputLang').innerHTML = langOpts;
+      $('resultLang').innerHTML = langOpts;
+      $('examples').innerHTML = '<option value="">Examples…</option>' + EXAMPLES.map((e) => `<option value="${e.id}">${e.name}</option>`).join('');
+    }
+
+    function expectedHostForProvider(id) {
+      const base = PROVIDERS[id]?.defaultBase;
+      if (!base || !base.startsWith('http')) return null;
+      try { return new URL(base).hostname; } catch { return null; }
+    }
+
+    function isSavedConfigValidForProvider(id) {
+      if (PROVIDERS[id]?.isCustom || PROVIDERS[id]?.hideBaseUrl) return true;
+      const savedBase = config.baseUrls?.[id];
+      if (!savedBase) return true;
+      const host = expectedHostForProvider(id);
+      if (!host) return true;
+      return savedBase.includes(host);
+    }
+
+    function hostnameFromUrl(url) {
+      try { return new URL(url).hostname; } catch { return ''; }
+    }
+
+    function applyProviderUI(id) {
+      const p = PROVIDERS[id];
+      if (!p) return;
+      if (!isSavedConfigValidForProvider(id)) {
+        delete config.models?.[id];
+        delete config.baseUrls?.[id];
+      }
+      const useSaved = isSavedConfigValidForProvider(id);
+      $('providerBadge').textContent = p.label;
+      $('modelHint').textContent = p.modelHint;
+      $('model').placeholder = p.defaultModel;
+      $('apiKey').placeholder = p.keyPlaceholder || 'API key';
+      $('keyOptional').classList.toggle('hidden', p.keyRequired !== false);
+      $('baseUrlWrap').classList.toggle('hidden', !!p.hideBaseUrl);
+      $('customProviderHint').classList.toggle('hidden', !p.isCustom);
+      $('baseUrlLabelOpt').classList.toggle('hidden', !!p.baseRequired);
+      $('apiKey').value = config.keys[id] || '';
+      $('model').value = (useSaved && config.models[id]) ? config.models[id] : p.defaultModel;
+      $('baseUrl').value = (useSaved && config.baseUrls[id]) ? config.baseUrls[id] : (p.defaultBase || '');
+      $('baseUrl').placeholder = p.defaultBase || '';
+    }
+
+    function resetProviderDefaults() {
+      const id = $('provider').value;
+      const p = PROVIDERS[id];
+      if (!p) return;
+      if (!config.models) config.models = {};
+      if (!config.baseUrls) config.baseUrls = {};
+      delete config.models[id];
+      delete config.baseUrls[id];
+      $('model').value = p.defaultModel;
+      if (!p.hideBaseUrl) $('baseUrl').value = p.defaultBase || '';
+      saveConfigToStorage();
+      showToast(p.hideBaseUrl ? `Model reset for ${p.label}` : `Model & URL reset for ${p.label}`);
+    }
+
+    let proxyProbeTimer = null;
+    let proxyReachable = true;
+
+    function getProxyPingUrl() {
+      const mode = $('connectionMode').value;
+      const raw = $('proxyUrl').value.trim();
+      if (mode === 'node') {
+        const base = raw.replace(/\/proxy\/?$/i, '').replace(/\/$/, '') || 'http://localhost:8787';
+        return base + '/health';
+      }
+      const base = raw.split('?')[0];
+      return base + (base.includes('?') ? '&' : '?') + 'ping=1';
+    }
+
+    function getProxyDocUrl() {
+      const mode = $('connectionMode').value;
+      if (mode === 'node') return 'documentation/index.html#node-proxy';
+      if (mode === 'php') return 'documentation/index.html#php-proxy';
+      return 'documentation/index.html#connection-modes';
+    }
+
+    function setProxyStatus(state, message, showHelp) {
+      const dot = $('proxyStatusDot');
+      const text = $('proxyStatusText');
+      const help = $('proxyStatusHelp');
+      dot.className = 'proxy-dot ' + (state === 'checking' ? 'checking' : state === 'ok' ? 'ok' : state === 'fail' ? 'fail' : '');
+      text.textContent = message;
+      text.className = 'text-[11px] ' + (state === 'fail' ? 'text-red-400' : state === 'ok' ? 'text-emerald-400' : 't-text-dim');
+      if (showHelp && state === 'fail') {
+        help.classList.remove('hidden');
+        help.innerHTML = `<span class="proxy-help" id="proxyDocLink">Proxy unreachable — open setup guide →</span>`;
+        $('proxyDocLink').onclick = () => window.open(getProxyDocUrl(), '_blank');
+      } else {
+        help.classList.add('hidden');
+        help.innerHTML = '';
+      }
+      proxyReachable = state === 'ok' || state === 'idle';
+    }
+
+    async function probeProxy() {
+      const mode = $('connectionMode').value;
+      if (mode === 'direct') {
+        setProxyStatus('ok', 'Direct mode — no proxy required', false);
+        proxyReachable = true;
+        return true;
+      }
+      const url = $('proxyUrl').value.trim();
+      if (!url) {
+        setProxyStatus('fail', 'Proxy URL is empty', true);
+        proxyReachable = false;
+        return false;
+      }
+      setProxyStatus('checking', 'Checking proxy…', false);
+      try {
+        const pingUrl = getProxyPingUrl();
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), 8000);
+        const res = await fetch(pingUrl, { method: 'GET', signal: ctrl.signal });
+        clearTimeout(t);
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.ok) {
+          setProxyStatus('ok', mode === 'node' ? 'Node proxy is running' : 'PHP proxy is reachable', false);
+          proxyReachable = true;
+          return true;
+        }
+        throw new Error(data.error || `HTTP ${res.status}`);
+      } catch (err) {
+        const msg = err.name === 'AbortError' ? 'Proxy timeout (8s)' : (err.message || 'Cannot reach proxy');
+        setProxyStatus('fail', msg, true);
+        proxyReachable = false;
+        return false;
+      }
+    }
+
+    function scheduleProxyProbe() {
+      clearTimeout(proxyProbeTimer);
+      proxyProbeTimer = setTimeout(probeProxy, 400);
+    }
+
+    function updateConnectionUI() {
+      const mode = $('connectionMode').value;
+      $('proxyUrlWrap').classList.toggle('hidden', mode === 'direct');
+      $('proxyStatusWrap').classList.toggle('hidden', mode === 'direct');
+      const hint = $('proxyUrlHint');
+      if (mode === 'direct') {
+        config.connectionMode = mode;
+        setProxyStatus('idle', 'Direct — browser calls API', false);
+        proxyReachable = true;
+        return;
+      }
+      const key = mode === 'node' ? 'node' : 'php';
+      config.proxyUrls = config.proxyUrls || {};
+      $('proxyUrl').value = config.proxyUrls[key] || PROXY_DEFAULTS[key];
+      if (mode === 'node') {
+        hint.textContent = 'Run: node proxy/server.js — default http://localhost:8787/proxy';
+      } else {
+        hint.textContent = 'Recommended for production. Optional if Direct works (e.g. DeepSeek).';
+      }
+      config.connectionMode = mode;
+      scheduleProxyProbe();
+    }
+
+    function showToast(msg) {
+      const t = $('toast');
+      t.textContent = msg;
+      t.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 2500);
+    }
+
+    function syncInputHighlight() {
+      const lang = $('inputLang').value;
+      const codeEl = $('inputHighlight').querySelector('code');
+      codeEl.className = lang === 'plaintext' ? '' : `language-${lang}`;
+      const code = $('codeInput').value;
+      codeEl.textContent = code.endsWith('\n') ? code + ' ' : code;
+      if (lang !== 'plaintext') hljs.highlightElement(codeEl);
+      $('inputHighlight').scrollTop = $('codeInput').scrollTop;
+    }
+
+    function highlightResult(code, lang) {
+      const el = $('resultCode');
+      el.className = lang === 'plaintext' ? '' : `language-${lang}`;
+      el.textContent = code;
+      if (lang !== 'plaintext') hljs.highlightElement(el);
+    }
+
+    function buildPrompt(code, errorMsg, lang) {
+      let p = `Analyze and fix the following ${lang} code. Identify defects and return the corrected version.\n\n`;
+      if (errorMsg.trim()) p += `Runtime or compiler error:\n${errorMsg.trim()}\n\n`;
+      p += `Source:\n\`\`\`${lang}\n${code}\n\`\`\`\n\nReply using this format only:\nEXPLANATION:\n(Brief summary of issues and fixes, 2-5 sentences)\n\nFIXED_CODE:\n\`\`\`${lang}\n(Complete corrected source, no omissions)\n\`\`\``;
+      return p;
+    }
+
+    function parseResponse(text) {
+      let explanation = '', code = '';
+      const em = text.match(/EXPLANATION:\s*([\s\S]*?)(?=FIXED_CODE:|```|$)/i);
+      if (em) explanation = em[1].trim();
+      const fm = text.match(/FIXED_CODE:\s*([\s\S]*)/i);
+      const block = fm ? fm[1] : text;
+      const fence = block.match(/```[\w]*\n?([\s\S]*?)```/);
+      if (fence) code = fence[1].trim();
+      else if (fm) code = fm[1].replace(/^```[\w]*\n?/, '').replace(/```\s*$/, '').trim();
+      if (!code) { const all = [...text.matchAll(/```[\w]*\n?([\s\S]*?)```/g)]; if (all.length) code = all.at(-1)[1].trim(); }
+      if (!explanation) { explanation = text.replace(/```[\s\S]*?```/g, '').trim().slice(0, 800); }
+      if (!code) code = text;
+      return { explanation, code };
+    }
+
+    function computeLineDiff(oldStr, newStr) {
+      const a = oldStr.split('\n'), b = newStr.split('\n');
+      const m = a.length, n = b.length;
+      const dp = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+      for (let i = 1; i <= m; i++)
+        for (let j = 1; j <= n; j++)
+          dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] + 1 : Math.max(dp[i-1][j], dp[i][j-1]);
+      const ops = [];
+      let i = m, j = n;
+      while (i > 0 || j > 0) {
+        if (i > 0 && j > 0 && a[i-1] === b[j-1]) { ops.unshift({ t:'same', line:a[--i] }); j--; }
+        else if (j > 0 && (i === 0 || dp[i][j-1] >= dp[i-1][j])) { ops.unshift({ t:'add', line:b[--j] }); }
+        else { ops.unshift({ t:'del', line:a[--i] }); }
+      }
+      return ops;
+    }
+
+    function renderDiff(original, fixed) {
+      const ops = computeLineDiff(original, fixed);
+      $('diffView').innerHTML = ops.map((o) => {
+        const cls = o.t === 'add' ? 'diff-add' : o.t === 'del' ? 'diff-del' : 'diff-same';
+        const pre = o.t === 'add' ? '+ ' : o.t === 'del' ? '- ' : '  ';
+        return `<div class="diff-line ${cls}">${pre}${escapeHtml(o.line || ' ')}</div>`;
+      }).join('') || '<p class="t-text-dim text-sm p-2">No differences</p>';
+    }
+
+    function escapeHtml(s) {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function setResultState(state, data) {
+      $('resultPlaceholder').classList.toggle('hidden', state !== 'placeholder');
+      $('resultContent').classList.toggle('hidden', state !== 'success');
+      $('resultError').classList.toggle('hidden', state !== 'error');
+      $('resultLoading').classList.toggle('hidden', state !== 'loading');
+      const disabled = state !== 'success';
+      $('copyResult').disabled = $('downloadResult').disabled = $('exportJson').disabled = disabled;
+      if (state === 'error') $('resultError').querySelector('div').textContent = data;
+      else if (state === 'success') {
+        $('resultExplanation').textContent = data.explanation;
+        highlightResult(data.code, $('resultLang').value);
+        renderDiff(lastOriginalCode, data.code);
+        lastResultText = data.code;
+        lastFullResponse = `EXPLANATION:\n${data.explanation}\n\nFIXED CODE:\n${data.code}`;
+      }
+    }
+
+    async function proxyRequest(targetUrl, headers, body, stream = false) {
+      const endpoint = getProxyEndpoint();
+      const allowedHost = hostnameFromUrl(targetUrl);
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: targetUrl, headers, body, stream, allowedHost })
+      });
+      if (!res.ok && !stream) {
+        const err = await res.text();
+        throw new Error(err || res.statusText);
+      }
+      return res;
+    }
+
+    function buildOpenAIUrl(baseUrl) {
+      let url = (baseUrl || 'https://api.openai.com/v1').replace(/\/$/, '');
+      if (!url.includes('/chat/completions')) url += '/chat/completions';
+      return url;
+    }
+
+    async function callOpenAICompat(apiKey, model, baseUrl, prompt, temperature, maxTokens, extra = {}, stream = false, onChunk) {
+      const targetUrl = buildOpenAIUrl(baseUrl);
+      const headers = { 'Content-Type': 'application/json', ...extra };
+      if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
+      const body = { model, messages: [{ role: 'user', content: prompt }], temperature, max_tokens: maxTokens, stream: !!stream };
+
+      if (useProxy()) {
+        const res = await proxyRequest(targetUrl, headers, body, stream);
+        if (stream) return readOpenAIStream(res, onChunk);
+        const data = await res.json();
+        if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
+        return data.choices?.[0]?.message?.content || '';
+      }
+
+      const res = await fetch(targetUrl, { method: 'POST', headers, body: JSON.stringify(body) });
+      if (stream) return readOpenAIStream(res, onChunk);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error?.message || res.statusText);
+      return data.choices?.[0]?.message?.content || '';
+    }
+
+    async function readOpenAIStream(res, onChunk) {
+      if (!res.ok) throw new Error(await res.text() || res.statusText);
+      const reader = res.body.getReader();
+      const dec = new TextDecoder();
+      let full = '', buf = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buf += dec.decode(value, { stream: true });
+        const lines = buf.split('\n');
+        buf = lines.pop() || '';
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          const payload = line.slice(6).trim();
+          if (payload === '[DONE]') continue;
+          try {
+            const j = JSON.parse(payload);
+            const delta = j.choices?.[0]?.delta?.content || '';
+            if (delta) { full += delta; onChunk?.(full); }
+          } catch (_) {}
+        }
+      }
+      return full;
+    }
+
+    async function callGemini(apiKey, model, prompt, temperature, maxTokens) {
+      const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
+      const body = { contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature, maxOutputTokens: maxTokens } };
+      if (useProxy()) {
+        const res = await proxyRequest(targetUrl, { 'Content-Type': 'application/json' }, body);
+        const data = await res.json();
+        if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
+        return data.candidates?.[0]?.content?.parts?.map((p) => p.text).join('') || '';
+      }
+      const res = await fetch(targetUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error?.message || res.statusText);
+      return data.candidates?.[0]?.content?.parts?.map((p) => p.text).join('') || '';
+    }
+
+    async function callClaude(apiKey, model, baseUrl, prompt, temperature, maxTokens) {
+      const targetUrl = `${(baseUrl || 'https://api.anthropic.com').replace(/\/$/, '')}/v1/messages`;
+      const headers = useProxy()
+        ? { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' }
+        : { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' };
+      const body = { model, max_tokens: maxTokens, temperature, messages: [{ role: 'user', content: prompt }] };
+      if (useProxy()) {
+        const res = await proxyRequest(targetUrl, headers, body);
+        const data = await res.json();
+        if (data.error) throw new Error(data.error?.message || data.message);
+        return data.content?.find((b) => b.type === 'text')?.text || '';
+      }
+      const res = await fetch(targetUrl, { method: 'POST', headers, body: JSON.stringify(body) });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error?.message || res.statusText);
+      return data.content?.find((b) => b.type === 'text')?.text || '';
+    }
+
+    async function callCohere(apiKey, model, baseUrl, prompt, temperature, maxTokens) {
+      const targetUrl = `${(baseUrl || 'https://api.cohere.com').replace(/\/$/, '')}/v2/chat`;
+      const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` };
+      const body = { model, messages: [{ role: 'user', content: prompt }], temperature, max_tokens: maxTokens };
+      if (useProxy()) {
+        const res = await proxyRequest(targetUrl, headers, body);
+        const data = await res.json();
+        if (data.message) throw new Error(data.message);
+        return data.message?.content?.[0]?.text || data.text || '';
+      }
+      const res = await fetch(targetUrl, { method: 'POST', headers, body: JSON.stringify(body) });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || res.statusText);
+      return data.message?.content?.[0]?.text || data.text || '';
+    }
+
+    async function callProvider(providerId, apiKey, model, baseUrl, prompt, temperature, maxTokens, stream, onChunk) {
+      const p = PROVIDERS[providerId];
+      const extra = p.openRouter ? { 'HTTP-Referer': location.href, 'X-Title': $('appTitle').textContent } : {};
+      switch (p.apiType) {
+        case 'gemini': return callGemini(apiKey, model, prompt, temperature, maxTokens);
+        case 'claude': return callClaude(apiKey, model, baseUrl, prompt, temperature, maxTokens);
+        case 'cohere': return callCohere(apiKey, model, baseUrl, prompt, temperature, maxTokens);
+        default:
+          if (stream && p.streamable && (useProxy() || providerId === 'ollama'))
+            return callOpenAICompat(apiKey, model, baseUrl || p.defaultBase, prompt, temperature, maxTokens, extra, true, onChunk);
+          return callOpenAICompat(apiKey, model, baseUrl || p.defaultBase, prompt, temperature, maxTokens, extra, false);
+      }
+    }
+
+    function saveHistory(entry) {
+      let list = [];
+      try { list = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); } catch (_) {}
+      list.unshift({ ...entry, ts: Date.now() });
+      list = list.slice(0, 10);
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(list));
+    }
+
+    function renderHistoryModal() {
+      const list = loadHistoryList();
+      const el = $('historyList');
+      if (!list.length) { el.innerHTML = '<p class="t-text-dim p-3 text-center">No history yet</p>'; return; }
+      el.innerHTML = list.map((h, i) => `
+        <button type="button" data-idx="${i}" class="history-item w-full text-left px-3 py-2 rounded-lg mb-1 border t-border">
+          <div class="t-heading text-xs truncate">${escapeHtml(h.provider)} · ${new Date(h.ts).toLocaleString()}</div>
+          <div class="t-text-dim text-[11px] truncate">${escapeHtml(h.preview || '')}</div>
+        </button>`).join('');
+      el.querySelectorAll('.history-item').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const h = list[+btn.dataset.idx];
+          $('codeInput').value = h.code || '';
+          $('errorMsg').value = h.error || '';
+          $('inputLang').value = h.lang || 'javascript';
+          if (h.result) {
+            lastOriginalCode = h.code || '';
+            setResultState('success', { explanation: h.explanation || '', code: h.result });
+            $('resultLang').value = h.lang || 'javascript';
+          }
+          syncInputHighlight();
+          $('historyModal').classList.add('hidden');
+          $('historyModal').classList.remove('flex');
+        });
+      });
+    }
+
+    async function debugCode() {
+      const provider = $('provider').value;
+      const p = PROVIDERS[provider];
+      const apiKey = $('apiKey').value.trim();
+      const model = $('model').value.trim() || p.defaultModel;
+      const code = $('codeInput').value.trim();
+      if (p.keyRequired !== false && !apiKey) { showToast('Enter API key'); return; }
+      if (!code) { showToast('Paste code first'); return; }
+      if (p.isCustom) {
+        const base = $('baseUrl').value.trim();
+        if (!model) { showToast('Custom provider: enter Model'); $('model').focus(); return; }
+        if (!base || !base.startsWith('http')) { showToast('Custom provider: enter valid Base URL'); $('baseUrl').focus(); return; }
+      }
+      if (useProxy() && !proxyReachable) {
+        showToast('Proxy not reachable — fix connection or open setup guide');
+        $('proxyStatusHelp').classList.remove('hidden');
+        return;
+      }
+
+      lastOriginalCode = code;
+      const lang = $('inputLang').value;
+      const prompt = buildPrompt(code, $('errorMsg').value, lang);
+      const temperature = parseFloat($('temperature').value);
+      const maxTokens = parseInt($('maxTokens').value, 10) || 4096;
+      const wantStream = $('useStream').checked && p.streamable && (useProxy() || provider === 'ollama');
+
+      $('debugBtn').disabled = true;
+      $('debugBtnText').textContent = 'Fixing…';
+      setResultState('loading');
+      $('loadingText').textContent = wantStream ? 'Streaming fix…' : 'Analyzing…';
+
+      if (wantStream) {
+        setResultState('success', { explanation: '…', code: '' });
+        $('resultExplanation').textContent = 'Generating…';
+      }
+
+      try {
+        const onChunk = wantStream ? (full) => {
+          const partial = parseResponse(full);
+          $('resultExplanation').textContent = partial.explanation || 'Generating…';
+          if (partial.code) {
+            highlightResult(partial.code, lang);
+            renderDiff(lastOriginalCode, partial.code);
+          }
+        } : null;
+
+        const text = await callProvider(provider, apiKey, model, $('baseUrl').value.trim(), prompt, temperature, maxTokens, wantStream, onChunk);
+        $('resultLang').value = lang;
+        const parsed = parseResponse(text);
+        setResultState('success', parsed);
+        saveHistory({
+          provider: p.label, code, error: $('errorMsg').value, lang,
+          preview: code.slice(0, 60), result: parsed.code, explanation: parsed.explanation
+        });
+      } catch (err) {
+        let msg = err.message || String(err);
+        if (msg.includes('Failed to fetch')) msg += ' — Try PHP Proxy mode and upload api.php.';
+        setResultState('error', msg);
+      } finally {
+        $('debugBtn').disabled = false;
+        $('debugBtnText').textContent = 'Fix Code';
+      }
+    }
+
+    document.querySelectorAll('.result-tab').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        activeResultTab = tab.dataset.tab;
+        document.querySelectorAll('.result-tab').forEach((t) => {
+          t.classList.toggle('t-tab-active', t.dataset.tab === activeResultTab);
+          t.classList.toggle('t-text-dim', t.dataset.tab !== activeResultTab);
+        });
+        $('panelFixed').classList.toggle('hidden', activeResultTab !== 'fixed');
+        $('panelDiff').classList.toggle('hidden', activeResultTab !== 'diff');
+      });
+    });
+
+    $('provider').addEventListener('change', () => {
+      const prev = config.provider;
+      const next = $('provider').value;
+      if (prev && prev !== next) persistProviderFields(prev);
+      config.provider = next;
+      applyProviderUI(next);
+      saveConfigToStorage();
+    });
+    $('resetProviderDefaults').addEventListener('click', resetProviderDefaults);
+    $('connectionMode').addEventListener('change', () => { updateConnectionUI(); saveConfigToStorage(); });
+    $('proxyUrl').addEventListener('input', scheduleProxyProbe);
+    $('proxyUrl').addEventListener('blur', () => { saveConfigToStorage(); scheduleProxyProbe(); });
+    $('testProxyBtn').addEventListener('click', probeProxy);
+    $('themeSelect').addEventListener('change', () => { applyTheme($('themeSelect').value); saveConfigToStorage(); });
+    $('saveConfig').addEventListener('click', () => { saveConfigToStorage(); applyWhiteLabel(); $('saveStatus').classList.remove('hidden'); showToast('Saved'); setTimeout(() => $('saveStatus').classList.add('hidden'), 2000); });
+    $('temperature').addEventListener('input', () => { $('tempVal').textContent = $('temperature').value; });
+    $('toggleKey').addEventListener('click', () => { $('apiKey').type = $('apiKey').type === 'password' ? 'text' : 'password'; });
+    $('codeInput').addEventListener('input', syncInputHighlight);
+    $('codeInput').addEventListener('scroll', () => { $('inputHighlight').scrollTop = $('codeInput').scrollTop; });
+    $('inputLang').addEventListener('change', () => { $('resultLang').value = $('inputLang').value; syncInputHighlight(); });
+    $('resultLang').addEventListener('change', () => { if (lastResultText) highlightResult(lastResultText, $('resultLang').value); });
+    $('clearInput').addEventListener('click', () => { $('codeInput').value = ''; $('errorMsg').value = ''; syncInputHighlight(); });
+    $('debugBtn').addEventListener('click', debugCode);
+    $('examples').addEventListener('change', () => {
+      const ex = EXAMPLES.find((e) => e.id === $('examples').value);
+      if (!ex) return;
+      $('codeInput').value = ex.code;
+      $('errorMsg').value = ex.error || '';
+      $('inputLang').value = ex.lang;
+      syncInputHighlight();
+      $('examples').value = '';
+    });
+    document.querySelectorAll('.token-preset').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        $('maxTokens').value = btn.dataset.v;
+        document.querySelectorAll('.token-preset').forEach((b) => b.classList.toggle('t-preset', b.dataset.v === btn.dataset.v));
+      });
+    });
+    $('copyResult').addEventListener('click', async () => {
+      if (!lastFullResponse) return;
+      try { await navigator.clipboard.writeText(lastFullResponse); showToast('Copied'); } catch { showToast('Copy failed'); }
+    });
+    $('downloadResult').addEventListener('click', () => {
+      if (!lastFullResponse) return;
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([lastFullResponse], { type: 'text/plain' }));
+      a.download = `fixed-${Date.now()}.txt`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+    $('exportJson').addEventListener('click', () => {
+      if (!lastFullResponse) return;
+      const data = { version: APP_VERSION, original: lastOriginalCode, fixed: lastResultText, export: lastFullResponse, lang: $('resultLang').value, ts: new Date().toISOString() };
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
+      a.download = `debug-${Date.now()}.json`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+    $('historyBtn').addEventListener('click', () => { renderHistoryModal(); $('historyModal').classList.remove('hidden'); $('historyModal').classList.add('flex'); });
+    $('closeHistory').addEventListener('click', () => { $('historyModal').classList.add('hidden'); $('historyModal').classList.remove('flex'); });
+    $('clearHistory').addEventListener('click', () => { localStorage.removeItem(HISTORY_KEY); renderHistoryModal(); showToast('History cleared'); });
+    $('historyModal').addEventListener('click', (e) => { if (e.target === $('historyModal')) { $('historyModal').classList.add('hidden'); $('historyModal').classList.remove('flex'); } });
+
+    buildSelects();
+    $('provider').value = config.provider || 'openai';
+    $('themeSelect').value = config.theme || 'midnight';
+    $('connectionMode').value = config.connectionMode || 'php';
+    updateConnectionUI();
+    $('temperature').value = config.temperature ?? 0.2;
+    $('tempVal').textContent = $('temperature').value;
+    $('maxTokens').value = config.maxTokens ?? 4096;
+    $('useStream').checked = config.useStream !== false;
+    applyTheme(config.theme || 'midnight');
+    applyProviderUI($('provider').value);
+    applyWhiteLabel();
+    $('codeInput').value = EXAMPLES[0].code;
+    $('errorMsg').value = EXAMPLES[0].error;
+    $('inputLang').value = EXAMPLES[0].lang;
+    syncInputHighlight();
+  </script>
+</body>
+</html>
