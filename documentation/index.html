@@ -111,7 +111,7 @@ LICENSE.txt             License terms</pre>
   <p id="browser-direct">Many AI vendors block <strong>direct calls from a web page</strong> (browser security — not your country). If you see <code>Failed to fetch</code>, use <strong>PHP Proxy</strong> and upload <code>api.php</code>. Technical term: CORS.</p>
   <table>
     <tr><th>Mode</th><th>When to use</th><th>Proxy URL</th></tr>
-    <tr><td><strong>Direct</strong></td><td>Ollama, DeepSeek (often), quick tests</td><td>—</td></tr>
+    <tr><td><strong>Direct</strong></td><td>When the vendor allows browser access; Ollama (local)</td><td>—</td></tr>
     <tr><td><strong>PHP Proxy</strong></td><td class="ok">Default for live sites</td><td><code>api.php</code></td></tr>
     <tr><td><strong>Node Proxy</strong></td><td>Local dev only</td><td><code>http://localhost:8787/proxy</code></td></tr>
   </table>
@@ -144,7 +144,7 @@ LICENSE.txt             License terms</pre>
     <tr><td>Google Gemini</td><td><code>gemini-2.0-flash</code></td><td class="warn">No</td><td class="ok">Yes</td></tr>
     <tr><td>Anthropic Claude</td><td><code>claude-3-5-haiku-20241022</code></td><td class="warn">No</td><td class="ok">Yes</td></tr>
     <tr><td>Groq</td><td><code>llama-3.3-70b-versatile</code></td><td>Maybe</td><td class="ok">Yes</td></tr>
-    <tr><td>DeepSeek</td><td><code>deepseek-chat</code></td><td class="ok">Often</td><td>Optional</td></tr>
+    <tr><td>DeepSeek</td><td><code>deepseek-chat</code></td><td>Maybe</td><td class="ok">Yes</td></tr>
     <tr><td>Mistral AI</td><td><code>mistral-small-latest</code></td><td class="warn">No</td><td class="ok">Yes</td></tr>
     <tr><td>OpenRouter</td><td><code>openai/gpt-4o-mini</code></td><td class="warn">No</td><td class="ok">Yes</td></tr>
     <tr><td>Together AI</td><td><code>meta-llama/Llama-3.3-70B-Instruct-Turbo</code></td><td class="warn">No</td><td class="ok">Yes</td></tr>
@@ -197,7 +197,7 @@ LICENSE.txt             License terms</pre>
 
   <h2 id="faq">11. FAQ</h2>
   <p><strong>Failed to fetch?</strong> Use PHP Proxy + <code>api.php</code> in the same folder. Open the app with <code>https://</code>, not <code>file://</code>.</p>
-  <p><strong>Direct works (e.g. DeepSeek) — need proxy?</strong> No — keep Direct until it stops working, then switch.</p>
+  <p><strong>Direct works — need proxy?</strong> If Fix Code succeeds in Direct mode, you can keep it. Switch to PHP Proxy if you get <code>Failed to fetch</code> or when deploying for end users who may hit CORS limits.</p>
   <p><strong>Wrong model after switching provider?</strong> <strong>Reset model &amp; URL to defaults</strong> → Save.</p>
   <p><strong>Proxy red dot?</strong> Open <code>yoursite.com/api.php?ping=1</code> — should show <code>"ok":true</code>. Fix PHP/cURL or file path.</p>
   <p><strong>Output cut off?</strong><br>Advanced → Max tokens → 8192.</p>
